@@ -20,6 +20,7 @@ app.use(
   })
 );
 
+/*global process*/
 app.listen(process.env.PORT || 5000, () => {
-  console.log("server started on localhost:5000");
+  console.log("server started on http://localhost:5000/graphql");
 });

@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  background-color: #272c36;
+  color: #f7f7fa;
+  font-family: "Pathway Extreme", sans-serif;
+}
