@@ -9,7 +9,7 @@ import {
 } from "graphql";
 import Book from "../models/book.js";
 import Author from "../models/author.js";
-import _ from "lodash";
+// import _ from "lodash";
 
 // Types
 const BookType = new GraphQLObjectType({

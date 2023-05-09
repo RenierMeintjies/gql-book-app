@@ -34,7 +34,7 @@ export default function AddBook() {
 
   return (
     <>
-      <form className="flex w-[30%] flex-col" onSubmit={handleSubmit}>
+      <form className="flex w-[40%]  flex-col" onSubmit={handleSubmit}>
         <label className="flex flex-col">
           Book Name:
           <input
