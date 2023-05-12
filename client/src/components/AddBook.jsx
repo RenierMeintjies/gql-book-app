@@ -1,27 +1,36 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_AUTHORS } from "../queries/queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_AUTHORS, ADD_BOOK } from "../queries/queries";
 
 export default function AddBook() {
   const [name, setName] = useState("");
   const [genre, setGenre] = useState("");
-  const [authorIdname, setAuthorIdName] = useState("");
+  const [authorId, setauthorId] = useState("");
 
-  const { loading, error, data } = useQuery(GET_AUTHORS);
+  const { data, loading, error } = useQuery(GET_AUTHORS);
+  const [mutateFunction] = useMutation(ADD_BOOK);
+  // const { loading, error, data } = useQuery(GET_AUTHORS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
-  const resetFormState = () => {
-    setName("");
-    setGenre("");
-    setAuthorIdName("");
-  };
+  // const clearInputState = () => {
+  //   setName("");
+  //   setGenre("");
+  //   setauthorId("");
+  // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name, genre, authorIdname);
-    resetFormState();
+    await mutateFunction({
+      variables: {
+        name: name,
+        genre: genre,
+        authorId: authorId,
+      },
+    });
+    alert("Book Added Successfully");
+    // clearInputState();
   };
 
   const RenderAuthors = () => {
@@ -34,7 +43,7 @@ export default function AddBook() {
 
   return (
     <>
-      <form className="flex w-[40%]  flex-col" onSubmit={handleSubmit}>
+      <form className="flex w-80  flex-col" onSubmit={handleSubmit}>
         <label className="flex flex-col">
           Book Name:
           <input
@@ -57,13 +66,16 @@ export default function AddBook() {
           Author:
           <select
             className="rounded border-2 border-slate-500"
-            onChange={(e) => setAuthorIdName({ authorIdname: e.target.value })}
+            onChange={(e) => setauthorId({ authorId: e.target.value })}
           >
             <option>Select Author</option>
-            <RenderAuthors />
+            {RenderAuthors()}
           </select>
         </label>
-        <button className="my-2 rounded border-2 border-slate-500 bg-slate-400 p-1 text-white" type="submit">
+        <button
+          className="my-2 w-20 rounded border-2 border-slate-500 bg-slate-400 py-1 text-white"
+          type="submit"
+        >
           Add Book
         </button>
       </form>
