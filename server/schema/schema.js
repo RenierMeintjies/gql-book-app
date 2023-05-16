@@ -1,122 +1,71 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLSchema,
-  GraphQLID,
-  GraphQLInt,
-  GraphQLList,
-  GraphQLNonNull,
-} from "graphql";
 import Book from "../models/book.js";
 import Author from "../models/author.js";
-// import _ from "lodash";
 
-// Types
-const BookType = new GraphQLObjectType({
-  name: "Book",
-  fields: () => ({
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    genre: { type: GraphQLString },
-    author: {
-      type: AuthorType,
-      resolve(parent, args) {
-        // return _.find(authors, { id: parent.authorid });
-        return Author.findById(parent.authorId);
-      },
-    },
-  }),
-});
+// The GraphQL schema
+export const typeDefs = `#graphql
+type Book {
+  id: ID
+  name: String
+  genre: String
+  author: Author
+}
 
-const AuthorType = new GraphQLObjectType({
-  name: "Author",
-  fields: () => ({
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    age: { type: GraphQLInt },
-    books: {
-      type: new GraphQLList(BookType),
-      resolve(parent, args) {
-        // return _.filter(books, { authorid: parent.id });
-        return Book.find({ authorId: parent.id });
-      },
-    },
-  }),
-});
+type Author {
+  id: ID
+  name: String
+  age: Int
+  books: [Book]
+}
 
-const RootQuery = new GraphQLObjectType({
-  name: "RootQueryType",
-  fields: {
-    book: {
-      type: BookType,
-      args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        // return _.find(books, { id: args.id });
-        return Book.findById(args.id);
-      },
+type Query {
+  books: [Book]
+  authors: [Author]
+  book(id: ID!): Book
+  author(id: ID!): Author
+}
+
+type Mutation {
+   addBook(name: String!, genre: String!, authorId: ID!): Book
+}
+`;
+
+// A map of functions which return data for the schema.
+export const resolvers = {
+  Query: {
+    books: async () => {
+      return await Book.find({});
     },
-    author: {
-      type: AuthorType,
-      args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        // return _.find(authors, { id: args.id });
-        return Author.findById(args.id);
-      },
+    authors: async () => {
+      return await Author.find({});
     },
-    books: {
-      type: new GraphQLList(BookType),
-      resolve(parent, args) {
-        // return books;
-        return Book.find({});
-      },
+    book: async (parent, args) => {
+      return await Book.findById(args.id);
     },
-    authors: {
-      type: new GraphQLList(AuthorType),
-      resolve(parent, args) {
-        // return authors;
-        return Author.find({});
-      },
+    author: async (parent, args) => {
+      return await Author.findById(args.id);
     },
   },
-});
 
-const Mutation = new GraphQLObjectType({
-  name: "Mutation",
-  fields: {
-    addAuthor: {
-      type: AuthorType,
-      args: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        age: { type: new GraphQLNonNull(GraphQLInt) },
-      },
-      resolve(parent, args) {
-        let author = new Author({
-          name: args.name,
-          age: args.age,
-        });
-        return author.save();
-      },
-    },
-    addBook: {
-      type: BookType,
-      args: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        genre: { type: new GraphQLNonNull(GraphQLString) },
-        authorId: { type: new GraphQLNonNull(GraphQLID) },
-      },
-      resolve(parent, args) {
-        let book = new Book({
-          name: args.name,
-          genre: args.genre,
-          authorId: args.authorId,
-        });
-        return book.save();
-      },
+  Author: {
+    books: async (parent) => {
+      return await Book.find({ authorId: parent.id });
     },
   },
-});
 
-export default new GraphQLSchema({
-  query: RootQuery,
-  mutation: Mutation,
-});
+  Book: {
+    author: async (parent) => {
+      return await Author.findById(parent.authorId);
+    },
+  },
+
+  Mutation: {
+    addBook: async (parent, args) => {
+      const book = new Book({
+        name: args.name,
+        genre: args.genre,
+        authorId: args.authorId,
+      });
+      return await book.save();
+    },
+  },
+};

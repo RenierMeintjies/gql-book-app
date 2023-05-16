@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_AUTHORS, ADD_BOOK } from "../queries/queries";
+import { GET_AUTHORS, ADD_BOOK, GET_BOOKS } from "../queries/queries";
 
 export default function AddBook() {
   const [name, setName] = useState("");
@@ -9,28 +9,28 @@ export default function AddBook() {
 
   const { data, loading, error } = useQuery(GET_AUTHORS);
   const [mutateFunction] = useMutation(ADD_BOOK);
-  // const { loading, error, data } = useQuery(GET_AUTHORS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
-  // const clearInputState = () => {
-  //   setName("");
-  //   setGenre("");
-  //   setauthorId("");
-  // };
+  const clearInputState = () => {
+    setName("");
+    setGenre("");
+    setauthorId("");
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await mutateFunction({
+    if (!name || !genre || !authorId) return;
+    mutateFunction({
       variables: {
         name: name,
         genre: genre,
         authorId: authorId,
       },
+      refetchQueries: [{ query: GET_BOOKS }],
     });
-    alert("Book Added Successfully");
-    // clearInputState();
+    clearInputState();
   };
 
   const RenderAuthors = () => {
@@ -50,7 +50,7 @@ export default function AddBook() {
             className="rounded border-2 border-slate-500"
             type="text"
             placeholder="Enter Book Name"
-            onChange={(e) => setName({ name: e.target.value })}
+            onChange={(e) => setName(e.target.value)}
           />
         </label>
         <label className="flex flex-col">
@@ -59,15 +59,12 @@ export default function AddBook() {
             className="rounded border-2 border-slate-500"
             type="text"
             placeholder="Enter Genre"
-            onChange={(e) => setGenre({ genre: e.target.value })}
+            onChange={(e) => setGenre(e.target.value)}
           />
         </label>
         <label className="flex flex-col">
           Author:
-          <select
-            className="rounded border-2 border-slate-500"
-            onChange={(e) => setauthorId({ authorId: e.target.value })}
-          >
+          <select className="rounded border-2 border-slate-500" onChange={(e) => setauthorId(e.target.value)}>
             <option>Select Author</option>
             {RenderAuthors()}
           </select>
