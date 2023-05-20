@@ -11,6 +11,10 @@ export default function BookDetails({ bookId }) {
 
   if (!book) return null;
 
+  const RenderAllBooksByAuthor = () => {
+    return book.author.books.map((book) => <li key={book.id}>{book.name}</li>);
+  };
+
   return (
     <div className="mx-5">
       <h1>Book Details</h1>
@@ -18,11 +22,7 @@ export default function BookDetails({ bookId }) {
       <p>Genre: {book.genre}</p>
       <p>Author: {book.author.name}</p>
       <p>All books by this author:</p>
-      <ul>
-        {book.author.books.map((book) => (
-          <li key={book.id}>{book.name}</li>
-        ))}
-      </ul>
+      <ul key={book.id}>{RenderAllBooksByAuthor()}</ul>
     </div>
   );
 }
