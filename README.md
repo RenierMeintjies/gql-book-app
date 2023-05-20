@@ -1,1 +1,1 @@
-GraphQL app built following [this](https://www.youtube.com/playlist?list=PL4cUxeGkcC9iK6Qhn-QLcXCXPQUov1U7f) guide, but updated with modern React / Apollo syntax and using Apollo Server Express middleware.
+GraphQL app built following [this](https://www.youtube.com/playlist?list=PL4cUxeGkcC9iK6Qhn-QLcXCXPQUov1U7f) guide, but updated with modern React, Apollo Client and using Apollo Server Express middleware with MongoDB.
