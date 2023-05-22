@@ -43,7 +43,7 @@ export default function AddBook() {
 
   return (
     <>
-      <form className="flex w-80  flex-col" onSubmit={handleSubmit}>
+      <form className="flex  w-80 flex-col" onSubmit={handleSubmit}>
         <label className="flex flex-col">
           Book Name:
           <input
@@ -69,10 +69,7 @@ export default function AddBook() {
             {RenderAuthors()}
           </select>
         </label>
-        <button
-          className="my-2 w-20 rounded border-2 border-slate-500 bg-slate-400 py-1 text-white"
-          type="submit"
-        >
+        <button className="my-2 w-20 rounded bg-blue-400 py-1 text-white" type="submit">
           Add Book
         </button>
       </form>

@@ -16,12 +16,12 @@ export default function BookDetails({ bookId }) {
   };
 
   return (
-    <div className="mx-5">
-      <h1>Book Details</h1>
+    <div className="h-full w-full bg-blue-400 text-slate-100">
+      <h1 className="text-lg text-slate-900">Book Details:</h1>
       <h2>Book Name: {book.name}</h2>
       <p>Genre: {book.genre}</p>
       <p>Author: {book.author.name}</p>
-      <p>All books by this author:</p>
+      <p className="text-lg text-slate-900">All books by this author:</p>
       <ul key={book.id}>{RenderAllBooksByAuthor()}</ul>
     </div>
   );

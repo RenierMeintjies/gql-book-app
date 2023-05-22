@@ -14,7 +14,7 @@ export default function BookList() {
   const RenderBooks = () => {
     return data.books.map((book) => (
       <li
-        className="flex flex-col"
+        className="m-1 h-fit w-fit border-2 border-blue-400 p-1"
         key={book.id}
         onClick={() => {
           setSelected(book.id);
@@ -26,9 +26,11 @@ export default function BookList() {
   };
 
   return (
-    <div>
-      <ul className="flex w-full flex-row">
-        <div className="flex flex-col">{RenderBooks()}</div>
+    <div className="">
+      <ul className="flex flex-row">
+        <div className="flex h-full w-full flex-row flex-wrap justify-around text-center align-middle">
+          {RenderBooks()}
+        </div>
         <BookDetails bookId={selected} />
       </ul>
     </div>
