@@ -26,6 +26,7 @@ type Query {
 
 type Mutation {
    addBook(name: String!, genre: String!, authorId: ID!): Book
+   addAuthor(name: String!, age: Int!): Author
 }
 `;
 
@@ -66,6 +67,13 @@ export const resolvers = {
         authorId: args.authorId,
       });
       return await book.save();
+    },
+    addAuthor: async (parent, args) => {
+      const author = new Author({
+        name: args.name,
+        age: args.age,
+      });
+      return await author.save();
     },
   },
 };
