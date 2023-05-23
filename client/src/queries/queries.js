@@ -35,6 +35,15 @@ export const GET_AUTHORS = gql`
   }
 `;
 
+export const ADD_AUTHOR = gql`
+  mutation AddAuthor($name: String!, $age: Int!) {
+    addAuthor(name: $name, age: $age) {
+      name
+      age
+    }
+  }
+`;
+
 export const ADD_BOOK = gql`
   mutation AddBook($name: String!, $genre: String!, $authorId: ID!) {
     addBook(name: $name, genre: $genre, authorId: $authorId) {
